@@ -1,5 +1,15 @@
 import React from 'react';
-const Card = () => {
+import axios from "axios";
+import {Link} from "react-router-dom";
+const Card = ({content, id, owner}:{content:string, id: number, owner:boolean}) => {
+    const deletePost = async () => {
+      const res = await axios.delete(`http://localhost:3000/post/${id}`,{withCredentials:true} )
+        console.log(res);
+      if(res.status == 200) {
+          window.location.reload();
+      }
+    }
+
   return (
       <div className="col">
           <div className="card shadow-sm">
@@ -11,15 +21,16 @@ const Card = () => {
               </svg>
 
               <div className="card-body">
-                  <p className="card-text">This is a wider card with supporting text below as a
-                      natural lead-in to additional content. This content is a little bit
-                      longer.</p>
+                  <p className="card-text">
+                      {content}
+                  </p>
                   <div className="d-flex justify-content-between align-items-center">
                       <div className="btn-group">
-                          <button type="button" className="btn btn-sm btn-outline-secondary">View
+                          <button type="button" className="btn btn-sm btn-outline-secondary" onClick={deletePost}>Delete
                           </button>
-                          <button type="button" className="btn btn-sm btn-outline-secondary">Edit
-                          </button>
+                          {
+                              owner && <Link to={'/update-post/'+id} className="btn btn-sm btn-outline-secondary">Edit</Link>
+                          }
                       </div>
                       <small className="text-muted">9 mins</small>
                   </div>
